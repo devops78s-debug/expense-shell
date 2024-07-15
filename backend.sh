@@ -9,6 +9,9 @@ G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
 
+echo "Please enter DB password:"
+read -s mysql_root_password
+
 VALIDATE(){
    if [ $1 -ne 0 ]
    then
@@ -48,6 +51,34 @@ else
     echo -e "Expense user already created...$Y SKIPPING $N"
 fi    
 
-mkdir /app
+mkdir -p /app #-p validation checks 
 VALIDATE $? "Creating app directory"
 
+curl -o /tmp/backend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip
+VALIDATE $? "Downloading backendend code"
+
+cd /app
+unzip /tmp/backend.zip
+VALIDATE $? "Extracted backendend code"
+
+npm install
+VALIDATE $? "Installing Nodejs dependecies"
+
+#vim /etc/systemd/system/backend.service vim is for our visual
+cp /home/ec2-user/expense-shell/backend.service /etc/systemd/system/backend.service
+VALIDATE $? "copied backend service"
+
+systemctl daemon-reload
+systemctl start backend
+systemctl enable backend
+VALIDATE $? "Sartind and enabling backend"
+
+dnf install mysql -y
+VALIDATE $? "Installing mysql client"
+
+#mysql -h <MYSQL-SERVER-IPADDRESS> -uroot -pExpenseApp@1 < /app/schema/backend.sql
+mysql -h abhilash.store -uroot -p${mysql_root_password} < /app/schema/backend.sql &>>$LOGFILE
+VALIDATE $? "Schema Loading"
+
+systemctl restart backend
+VALIDATE $? "Restarting backend"
