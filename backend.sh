@@ -51,34 +51,34 @@ else
     echo -e "Expense user already created...$Y SKIPPING $N"
 fi    
 
-mkdir -p /app #-p validation checks 
+mkdir -p /app &>>LOGFILE  #-p validation checks 
 VALIDATE $? "Creating app directory"
 
-curl -o /tmp/backend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip
+curl -o /tmp/backend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip &>>LOGFILE
 VALIDATE $? "Downloading backendend code"
 
 cd /app
-unzip /tmp/backend.zip
+unzip /tmp/backend.zip &>>LOGFILE
 VALIDATE $? "Extracted backendend code"
 
-npm install
+npm install &>>LOGFILE
 VALIDATE $? "Installing Nodejs dependecies"
 
 #vim /etc/systemd/system/backend.service vim is for our visual
-cp /home/ec2-user/expense-shell/backend.service /etc/systemd/system/backend.service
+cp /home/ec2-user/expense-shell/backend.service /etc/systemd/system/backend.service &>>LOGFILE
 VALIDATE $? "copied backend service"
 
-systemctl daemon-reload
-systemctl start backend
-systemctl enable backend
+systemctl daemon-reload &>>LOGFILE
+systemctl start backend &>>LOGFILE
+systemctl enable backend &>>LOGFILE
 VALIDATE $? "Sartind and enabling backend"
 
-dnf install mysql -y
+dnf install mysql -y &>>LOGFILE
 VALIDATE $? "Installing mysql client"
 
 #mysql -h <MYSQL-SERVER-IPADDRESS> -uroot -pExpenseApp@1 < /app/schema/backend.sql
 mysql -h abhilash.store -uroot -p${mysql_root_password} < /app/schema/backend.sql &>>$LOGFILE
 VALIDATE $? "Schema Loading"
 
-systemctl restart backend
+systemctl restart backend &>>LOGFILE
 VALIDATE $? "Restarting backend"
