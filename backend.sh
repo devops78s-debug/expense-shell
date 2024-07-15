@@ -45,5 +45,6 @@ then
     #VALIDATE $? "Creating expense user"
 else
     echo -e "Expense user already created...$Y SKINPPING $N
+fi    
 
 
