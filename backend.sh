@@ -58,7 +58,8 @@ curl -o /tmp/backend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expen
 VALIDATE $? "Downloading backendend code"
 
 cd /app
-unzip /tmp/backend.zip &>>LOGFILE
+rm -rf /app/* #removing first everything in this folder
+unzip /tmp/backend.zip &>>LOGFILE # will struck and ask for rezip so writing rm
 VALIDATE $? "Extracted backendend code"
 
 npm install &>>LOGFILE
