@@ -39,12 +39,15 @@ VALIDATE $? "Installing nodejs"
 #useradd expense &>>LOGFILE  #username same will not create so idempotency not required
 #VALIDATE $? "Creating expense user"
 
+id expense &>>LOGFILE
 if [ $? -ne 0 ]
 then    
     useradd expese &>>LOGFILE
     #VALIDATE $? "Creating expense user"
 else
-    echo -e "Expense user already created...$Y SKINPPING $N"
+    echo -e "Expense user already created...$Y SKIPPING $N"
 fi    
 
+mkdir /app
+VALIDATE $? "Creating app directory"
 
