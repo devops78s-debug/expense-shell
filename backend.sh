@@ -36,6 +36,14 @@ VALIDATE $? "Enabling nodejs 20 version"
 dnf install nodejs -y &>>LOGFILE
 VALIDATE $? "Installing nodejs"
 
-useradd expense &>>LOGFILE  #username same will not create so idempotency not required
-VALIDATE $? "Creating expense user"
+#useradd expense &>>LOGFILE  #username same will not create so idempotency not required
+#VALIDATE $? "Creating expense user"
+
+if [ $? -ne 0 ]
+then    
+    useradd expese &>>LOGFILE
+    #VALIDATE $? "Creating expense user"
+else
+    echo -e "Expense user already created...$Y SKINPPING $N
+
 
