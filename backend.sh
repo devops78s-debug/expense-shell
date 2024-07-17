@@ -10,7 +10,7 @@ Y="\e[33m"
 N="\e[0m"
 
 echo "Please enter DB password:"
-read -s mysql_root_password #-s to hide password typing showcase
+read mysql_root_password #-s to hide password typing showcase
 
 VALIDATE(){
    if [ $1 -ne 0 ]
