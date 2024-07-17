@@ -78,7 +78,7 @@ dnf install mysql -y &>>LOGFILE
 VALIDATE $? "Installing mysql client"
 
 #mysql -h <MYSQL-SERVER-IPADDRESS> -uroot -pExpenseApp@1 < /app/schema/backend.sql
-mysql -h abhilash.store -uroot -p${mysql_root_password} < /app/schema/backend.sql &>>$LOGFILE
+mysql -h db.abhilash.store -uroot -p${mysql_root_password} < /app/schema/backend.sql &>>$LOGFILE
 VALIDATE $? "Schema Loading"
 
 systemctl restart backend &>>LOGFILE
